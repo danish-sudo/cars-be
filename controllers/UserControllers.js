@@ -16,14 +16,13 @@ exports.getAllUsers = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const pass = await generatePassword();
-
     req.body.password = await BCRYPT.hash(pass, 10);
 
     sendEmail(req.body.email, pass);
     const user = await userService.createUser(req.body);
-    res.json({ data: user, success: true });
+    res.json({ success: true });
   } catch (err) {
-    res.json({ error: err.code, success: false });
+    res.json({ error: err, success: false });
   }
 };
 const generatePassword = async () => {
@@ -40,13 +39,13 @@ exports.loginUser = async (req, res) => {
     const user = await userService.getUserByEmail(req.body.email);
     const validPassword = await BCRYPT.compare(
       req.body.password,
-      user[0].password
+      user.password
     );
 
     if (validPassword) {
       const token = JWT.sign(
         {
-          email: user[0].email,
+          email: user.email,
         },
         process.env.TOKEN_KEY,
         {
@@ -55,7 +54,6 @@ exports.loginUser = async (req, res) => {
         }
       );
       const total = await totalCars();
-      console.log(user);
       res.json({ data: user, success: true, token, totalCars: total });
     } else {
       res.json({ error: 403, success: false });

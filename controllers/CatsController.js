@@ -22,7 +22,7 @@ exports.createCat = async (req, res) => {
 exports.getCatById = async (req, res) => {
   try {
     const cat = await catService.getCatById(req.params.id);
-    res.json({ data: cat, status: "success" });
+    res.json({ data: cat, success: true });
   } catch (err) {
     res.json({ error: err.message });
   }
@@ -31,7 +31,7 @@ exports.getCatById = async (req, res) => {
 exports.updateCat = async (req, res) => {
   try {
     const cat = await catService.updateCat(req.params.id, req.body);
-    res.json({ data: cat, status: "success" });
+    res.json({ data: cat, success: true });
   } catch (err) {
     res.json({ error: err.message });
   }
@@ -40,7 +40,7 @@ exports.updateCat = async (req, res) => {
 exports.deleteCat = async (req, res) => {
   try {
     const cat = await catService.deleteCat(req.params.id);
-    res.json({ data: cat, status: "success" });
+    res.json({ data: cat, success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -2,26 +2,23 @@ const nodemailer = require("nodemailer");
 
 exports.sendEmail = async (email, password) => {
   try {
-    let testAccount = await nodemailer.createTestAccount();
-
     // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // true for 465, false for other ports
+    const transport = nodemailer.createTransport({
+      host: "smtp.mailtrap.io",
+      port: 2525,
       auth: {
-        user: "carmen15@ethereal.email", // generated ethereal user
-        pass: "ddHFrMHs6sZWJ7Zwh9", // generated ethereal password
+        user: "25955a1b42f8b9",
+        pass: "ec5f06ad3249a0",
       },
     });
     const mailOptions = {
-      from: process.env.MAILER_USER,
+      from: "iamdanishsiddique@gmail.com",
       to: email,
       subject: "Registration Success",
-      text: `Your Password is : ${password}`,
+      text: `Email : ${email}, Your Password is : ${password}`,
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    transport.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
       } else {

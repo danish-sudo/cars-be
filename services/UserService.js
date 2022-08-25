@@ -11,12 +11,7 @@ exports.getUserById = async (id) => {
   return await UserModel.findById(id);
 };
 exports.getUserByEmail = async (email) => {
-  return await UserModel.find(
-    {},
-    {
-      email: email,
-    }
-  ).select({ email: 1, password: 1, _id: 0 });
+  return await UserModel.findOne({ email });
 };
 exports.updateUser = async (id, user) => {
   return await UserModel.findByIdAndUpdate(id, user);

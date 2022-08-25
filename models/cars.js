@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 const carsSchema = new Schema(
   {
     id: Number,
+    cat_id: {
+      type: String,
+    },
     color: {
       type: String,
       required: true,

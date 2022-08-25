@@ -1,11 +1,18 @@
 const carService = require("../services/CarService");
-const CatModel = require("../models/categories");
+const catService = require("../services/CatService");
 
 exports.getAllCars = async (req, res) => {
   try {
     const cars = await carService.getAllCars(req);
-
-    res.json({ data: cars.cars, total: cars.total, status: "success" });
+    console.log(cars);
+    const results = await Promise.all(
+      cars.cars.map(async (element) => {
+        const cats = await catService.getCatById(element.cat_id);
+        element.cat_id = cats.type;
+        return element;
+      })
+    );
+    res.json({ data: results, total: cars.total, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -24,7 +31,7 @@ exports.createCar = async (req, res) => {
 exports.getCarById = async (req, res) => {
   try {
     const car = await carService.getCarById(req.params.id);
-    res.json({ data: car, status: "success" });
+    res.json({ data: car, success: true });
   } catch (err) {
     res.json({ error: err.message });
   }
@@ -33,7 +40,7 @@ exports.getCarById = async (req, res) => {
 exports.updateCar = async (req, res) => {
   try {
     const car = await carService.updateCar(req.params.id, req.body);
-    res.json({ data: car, status: "success" });
+    res.json({ success: true });
   } catch (err) {
     res.json({ error: err.message });
   }
